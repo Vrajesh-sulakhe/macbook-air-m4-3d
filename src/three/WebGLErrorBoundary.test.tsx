@@ -147,10 +147,24 @@ describe('WebGL fallback & performance budget', () => {
       </WebGLErrorBoundary>,
     );
 
-    expect(screen.getByTestId('static-macbook-fallback')).toBeInTheDocument();
-    expect(screen.getByText(/Sky Blue/i)).toBeInTheDocument();
-    expect(screen.getByText(/13-inch/i)).toBeInTheDocument();
-    expect(screen.getByText(/2560 × 1664/)).toBeInTheDocument();
+    const fallbackRoot = screen.getByTestId('static-macbook-fallback');
+    expect(fallbackRoot).toBeInTheDocument();
+    expect(fallbackRoot).not.toHaveAttribute('role', 'img');
+
+    const illustration = screen.getByRole('img', {
+      name: /13-inch MacBook Air in Sky Blue static studio preview/i,
+    });
+    expect(illustration.tagName.toLowerCase()).toBe('svg');
+
+    const finishLabel = screen.getByText(/Sky Blue/i);
+    const sizeLabel = screen.getByText(/13-inch/i);
+    const resolutionText = screen.getByText(/2560 × 1664/);
+    const chipText = screen.getByText(/Apple M4/i);
+
+    expect(illustration).not.toContainElement(finishLabel);
+    expect(illustration).not.toContainElement(sizeLabel);
+    expect(illustration).not.toContainElement(resolutionText);
+    expect(illustration).not.toContainElement(chipText);
     expect(onError).toHaveBeenCalledWith(expect.objectContaining({ message: 'WebGL context lost' }));
     errSpy.mockRestore();
   });

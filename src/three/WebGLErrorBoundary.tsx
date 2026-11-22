@@ -61,8 +61,6 @@ export function StaticMacBookFallback({ finish, size }: StaticMacBookFallbackPro
   return (
     <div
       data-testid="static-macbook-fallback"
-      role="img"
-      aria-label={`${sizeSpec.label} MacBook Air in ${palette.name} static studio preview`}
       className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-[#050608] px-6 py-8 text-[#f5f5f7] select-none"
       style={{
         backgroundImage: `radial-gradient(65% 55% at 50% 42%, ${palette.rimTint}24 0%, rgba(12, 16, 24, 0.72) 55%, #050608 100%)`,
@@ -83,8 +81,9 @@ export function StaticMacBookFallback({ finish, size }: StaticMacBookFallbackPro
 
       <svg
         viewBox="0 0 480 280"
+        role="img"
+        aria-label={`${sizeSpec.label} MacBook Air in ${palette.name} static studio preview`}
         className="w-full max-w-[440px] drop-shadow-[0_24px_48px_rgba(0,0,0,0.85)]"
-        aria-hidden="true"
       >
         <defs>
           <linearGradient id={chassisGradId} x1="0%" y1="0%" x2="100%" y2="100%">
