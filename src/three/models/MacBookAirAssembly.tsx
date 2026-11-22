@@ -34,6 +34,7 @@ export interface MacBookAirAssemblyProps {
   manualLidAngleDeg: number | null;
   manualXray: boolean | null;
   manualBacklight: boolean | null;
+  manualMagSafeSnap?: number | null;
   reducedMotion: boolean;
   isStudioInteractive: boolean;
 }
@@ -51,6 +52,7 @@ export function MacBookAirAssembly({
   manualLidAngleDeg,
   manualXray,
   manualBacklight,
+  manualMagSafeSnap = null,
   reducedMotion,
   isStudioInteractive,
 }: MacBookAirAssemblyProps) {
@@ -418,6 +420,7 @@ export function MacBookAirAssembly({
         {/* MagSafe 3 + Dual Thunderbolt 4 + 3.5mm Audio Jack */}
         <PortsAndMagSafe
           timelineRef={timelineRef}
+          manualMagSafeSnap={manualMagSafeSnap}
           finish={finish}
           chassisWidth={baseMetrics.width}
           baseThickness={baseMetrics.baseThickness}

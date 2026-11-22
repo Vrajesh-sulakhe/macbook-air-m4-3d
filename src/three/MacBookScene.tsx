@@ -10,7 +10,8 @@ import {
 } from 'react';
 import { ContactShadows, Environment, Lightformer, OrbitControls } from '@react-three/drei';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Bloom, EffectComposer, Vignette } from '@react-three/postprocessing';
+import { Bloom, EffectComposer, ToneMapping, Vignette } from '@react-three/postprocessing';
+import { ToneMappingMode } from 'postprocessing';
 import * as THREE from 'three';
 import {
   CAMERA_PRESETS,
@@ -58,7 +59,7 @@ function StudioEnvironment({ finish }: { finish: FinishId }) {
       <>
         <Lightformer
           form="rect"
-          intensity={2.2}
+          intensity={2.7}
           color="#f8fafc"
           position={[0, 6, 1]}
           rotation={[Math.PI / 2, 0, 0]}
@@ -66,7 +67,7 @@ function StudioEnvironment({ finish }: { finish: FinishId }) {
         />
         <Lightformer
           form="rect"
-          intensity={1.7}
+          intensity={2.1}
           color={rimTint}
           position={[-6, 2.2, 2]}
           rotation={[0, Math.PI / 2, 0]}
@@ -399,6 +400,7 @@ export function MacBookScene({
         manualLidAngleDeg={manualLidAngleDeg}
         manualXray={manualXray}
         manualBacklight={manualBacklight}
+        manualMagSafeSnap={isStudioInteractive ? (studioPreset === 'ports' ? 1 : 0) : null}
         reducedMotion={reducedMotion}
         isStudioInteractive={isStudioInteractive}
       />
@@ -431,6 +433,7 @@ export function MacBookScene({
         <EffectComposer multisampling={0}>
           <Bloom mipmapBlur luminanceThreshold={0.85} intensity={0.42} />
           <Vignette darkness={0.42} offset={0.28} />
+          <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
         </EffectComposer>
       )}
     </Canvas>

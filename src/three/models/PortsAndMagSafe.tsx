@@ -32,6 +32,7 @@ function createHollowStadiumFrameGeometry(
 
 export interface PortsAndMagSafeProps {
   timelineRef: MutableRefObject<TimelineState>;
+  manualMagSafeSnap: number | null;
   finish: FinishId;
   chassisWidth: number;
   baseThickness: number;
@@ -48,6 +49,7 @@ const AUDIO_JACK_Z = -0.55;
  */
 export function PortsAndMagSafe({
   timelineRef,
+  manualMagSafeSnap,
   finish,
   chassisWidth,
   baseThickness,
@@ -133,7 +135,8 @@ export function PortsAndMagSafe({
   useFrame((state, delta) => {
     const dt = Math.min(delta, 0.05);
     const lerpAlpha = reducedMotion ? 1 : 1 - Math.exp(-10 * dt);
-    const targetSnap = THREE.MathUtils.clamp(timelineRef.current.magsafeSnap, 0, 1);
+    const rawSnap = manualMagSafeSnap !== null ? manualMagSafeSnap : timelineRef.current.magsafeSnap;
+    const targetSnap = THREE.MathUtils.clamp(rawSnap, 0, 1);
     snapSmooth.current = THREE.MathUtils.lerp(snapSmooth.current, targetSnap, lerpAlpha);
 
     const plugGroup = plugGroupRef.current;

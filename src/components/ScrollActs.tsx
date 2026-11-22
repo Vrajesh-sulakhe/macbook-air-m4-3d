@@ -93,7 +93,7 @@ export function ScrollActs({ finish, onFinishPreview, onJumpToStudio }: ScrollAc
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050608]/85 via-[#050608]/25 to-transparent sm:bg-gradient-to-r sm:from-[#050608]/80 sm:via-[#050608]/30 sm:to-transparent"
         />
-        <div className="pointer-events-auto relative w-full max-w-xl rounded-3xl border border-white/12 bg-[#070A10]/72 p-6 text-[#F5F5F7] shadow-[0_24px_64px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:p-8">
+        <div className="pointer-events-auto relative w-full max-w-lg rounded-3xl border border-white/12 bg-[#070A10]/72 p-6 text-[#F5F5F7] shadow-[0_24px_64px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:p-8">
           <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#7BB3E0]">
             Apple M4 Silicon
           </p>
@@ -134,7 +134,7 @@ export function ScrollActs({ finish, onFinishPreview, onJumpToStudio }: ScrollAc
         aria-labelledby="act-design-heading"
         className="pointer-events-none relative flex min-h-[145vh] items-center px-4 py-24 sm:px-8 lg:px-14"
       >
-        <div className="pointer-events-auto relative w-full max-w-xl rounded-3xl border border-[#101319]/12 bg-[#F4F6F9]/88 p-6 text-[#101319] shadow-[0_24px_64px_rgba(16,19,25,0.16)] backdrop-blur-xl sm:p-8 lg:ml-auto">
+        <div className="pointer-events-auto relative w-full max-w-lg rounded-3xl border border-[#101319]/12 bg-[#F4F6F9]/88 p-6 text-[#101319] shadow-[0_24px_64px_rgba(16,19,25,0.16)] backdrop-blur-xl sm:p-8 lg:ml-auto">
           <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#24537A]">
             Anodized Unibody
           </p>
@@ -199,7 +199,7 @@ export function ScrollActs({ finish, onFinishPreview, onJumpToStudio }: ScrollAc
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#080C14]/70 via-transparent to-transparent"
         />
-        <div className="pointer-events-auto relative w-full max-w-xl rounded-3xl border border-[#38BDF8]/25 bg-[#080C14]/82 p-6 text-[#F5F5F7] shadow-[0_24px_64px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:p-8">
+        <div className="pointer-events-auto relative w-full max-w-lg rounded-3xl border border-[#38BDF8]/25 bg-[#080C14]/82 p-6 text-[#F5F5F7] shadow-[0_24px_64px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:p-8">
           <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#38BDF8]">
             M4 Silicon Architecture
           </p>
@@ -250,7 +250,7 @@ export function ScrollActs({ finish, onFinishPreview, onJumpToStudio }: ScrollAc
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050608]/75 via-transparent to-transparent sm:bg-gradient-to-r sm:from-[#090B10]/70 sm:via-transparent sm:to-transparent"
         />
-        <div className="pointer-events-auto relative w-full max-w-xl rounded-3xl border border-white/15 bg-[#090B10]/82 p-6 text-[#F5F5F7] shadow-[0_24px_64px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:p-8">
+        <div className="pointer-events-auto relative w-full max-w-lg rounded-3xl border border-white/15 bg-[#090B10]/82 p-6 text-[#F5F5F7] shadow-[0_24px_64px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:p-8">
           <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#7BB3E0]">
             Liquid Retina Display
           </p>
@@ -275,7 +275,7 @@ export function ScrollActs({ finish, onFinishPreview, onJumpToStudio }: ScrollAc
         aria-labelledby="act-connectivity-heading"
         className="pointer-events-none relative flex min-h-[135vh] items-center px-4 py-24 sm:px-8 lg:px-14"
       >
-        <div className="pointer-events-auto relative w-full max-w-xl rounded-3xl border border-[#101319]/12 bg-[#EAEFF5]/88 p-6 text-[#101319] shadow-[0_24px_64px_rgba(16,19,25,0.16)] backdrop-blur-xl sm:p-8 lg:ml-auto">
+        <div className="pointer-events-auto relative w-full max-w-lg rounded-3xl border border-[#101319]/12 bg-[#EAEFF5]/88 p-6 text-[#101319] shadow-[0_24px_64px_rgba(16,19,25,0.16)] backdrop-blur-xl sm:p-8 lg:ml-auto">
           <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#24537A]">
             Connectivity &amp; Endurance
           </p>

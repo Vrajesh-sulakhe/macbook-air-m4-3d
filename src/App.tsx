@@ -1,4 +1,4 @@
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { ScrollActs } from './components/ScrollActs';
 import { StudioConfigurator } from './components/StudioConfigurator';
@@ -13,13 +13,10 @@ import {
   type ScreenModeId,
 } from './data/macbookSpecs';
 import { useScrollTimeline } from './hooks/useScrollTimeline';
+import { MacBookScene } from './three/MacBookScene';
 import { createInitialTimelineState } from './three/scrollChoreography';
 import { StaticMacBookFallback, WebGLErrorBoundary } from './three/WebGLErrorBoundary';
 import { detectWebGLSupport, usePrefersReducedMotion } from './utils/webglSupport';
-
-const MacBookScene = lazy(() =>
-  import('./three/MacBookScene').then((mod) => ({ default: mod.MacBookScene })),
-);
 
 const ACT_BACKGROUNDS: readonly string[] = [
   '#050608', // Act 1: Obsidian Keynote Hero
@@ -114,14 +111,12 @@ export default function App() {
   const handlePresetChange = useCallback((preset: CameraPresetId) => {
     setStudioPreset(preset);
     setManualXray(preset === 'xray');
-    timelineRef.current.magsafeSnap = preset === 'ports' ? 1 : 0;
   }, []);
 
   const handleXrayToggle = useCallback((enabled: boolean) => {
     setManualXray(enabled);
     setStudioPreset((prev) => {
       if (enabled) {
-        timelineRef.current.magsafeSnap = 0;
         return 'xray';
       }
       return prev === 'xray' ? 'hero' : prev;
@@ -144,7 +139,6 @@ export default function App() {
     setManualXray(false);
     setManualBacklight(true);
     setScreenMode('sequoia');
-    timelineRef.current.magsafeSnap = 0;
   }, []);
 
   const activePalette = FINISH_PALETTES[config.finish];
@@ -154,7 +148,7 @@ export default function App() {
   const isLightBackdrop = !isStudioInteractive && (activeActIndex === 1 || activeActIndex === 4);
 
   const stageContainerClass = isStudioInteractive
-    ? 'fixed inset-x-0 top-0 z-10 h-[46vh] pointer-events-auto lg:inset-y-0 lg:left-0 lg:right-[480px] lg:h-auto xl:right-[520px]'
+    ? 'fixed inset-x-3 top-[68px] z-30 h-[34vh] rounded-2xl border border-white/15 shadow-[0_24px_60px_rgba(0,0,0,0.85)] pointer-events-auto lg:inset-y-0 lg:left-0 lg:right-[480px] lg:top-0 lg:h-auto lg:rounded-none lg:border-0 lg:shadow-none xl:right-[520px]'
     : 'fixed inset-0 z-0 pointer-events-none';
 
   return (
@@ -183,24 +177,20 @@ export default function App() {
             fallback={<StaticMacBookFallback finish={config.finish} size={config.size} />}
           >
             {webglSupported ? (
-              <Suspense
-                fallback={<StaticMacBookFallback finish={config.finish} size={config.size} />}
-              >
-                <MacBookScene
-                  timelineRef={timelineRef}
-                  isStudioInteractive={isStudioInteractive}
-                  studioPreset={studioPreset}
-                  zoomStep={zoomStep}
-                  finish={config.finish}
-                  size={config.size}
-                  screenMode={screenMode}
-                  manualLidAngleDeg={manualLidAngleDeg}
-                  manualXray={manualXray}
-                  manualBacklight={manualBacklight}
-                  reducedMotion={reducedMotion}
-                  viewportWidth={viewportWidth}
-                />
-              </Suspense>
+              <MacBookScene
+                timelineRef={timelineRef}
+                isStudioInteractive={isStudioInteractive}
+                studioPreset={studioPreset}
+                zoomStep={zoomStep}
+                finish={config.finish}
+                size={config.size}
+                screenMode={screenMode}
+                manualLidAngleDeg={manualLidAngleDeg}
+                manualXray={manualXray}
+                manualBacklight={manualBacklight}
+                reducedMotion={reducedMotion}
+                viewportWidth={viewportWidth}
+              />
             ) : (
               <StaticMacBookFallback finish={config.finish} size={config.size} />
             )}
@@ -208,8 +198,8 @@ export default function App() {
         </div>
 
         {isStudioInteractive && webglSupported && (
-          <div className="pointer-events-none absolute inset-x-0 bottom-4 flex justify-center px-4">
-            <span className="rounded-full border border-white/15 bg-[#0A0D14]/78 px-3.5 py-1.5 font-mono text-[11px] text-[#CBD5E1] backdrop-blur-md">
+          <div className="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center px-4">
+            <span className="rounded-full border border-white/15 bg-[#0A0D14]/78 px-3 py-1 font-mono text-[10px] text-[#CBD5E1] backdrop-blur-md sm:text-[11px]">
               Drag to orbit 360° · Double-click to reset
             </span>
           </div>
@@ -231,11 +221,8 @@ export default function App() {
           ref={studioRef}
           id="studio"
           aria-label="Interactive 3D Studio and Configurator"
-          className="pointer-events-none relative z-20 min-h-screen px-4 pt-6 pb-16 sm:px-6 lg:flex lg:items-center lg:px-8 lg:py-24"
+          className="pointer-events-none relative z-20 min-h-screen px-4 pt-[calc(34vh+84px)] pb-16 sm:px-6 lg:flex lg:items-center lg:px-8 lg:py-24"
         >
-          {/* Mobile spacer leaving top 46vh clear for the pinned 3D stage */}
-          <div className="h-[44vh] lg:hidden" aria-hidden="true" />
-
           <div className="pointer-events-auto relative z-20 w-full lg:ml-auto lg:w-[460px] xl:w-[500px]">
             <StudioConfigurator
               config={config}

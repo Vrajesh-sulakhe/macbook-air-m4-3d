@@ -239,7 +239,7 @@ export function StudioConfigurator({
           <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#9BA3B4]">
             Display Showcase
           </p>
-          <div role="group" aria-label="Display screen mode" className="mt-2 grid grid-cols-2 gap-1.5">
+          <div role="group" aria-label="Display screen mode" className="mt-2 grid grid-cols-1 gap-1.5 min-[420px]:grid-cols-2">
             {SCREEN_MODE_ORDER.map((modeId) => {
               const mode = SCREEN_MODES[modeId];
               const active = screenMode === modeId;

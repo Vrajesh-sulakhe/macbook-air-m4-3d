@@ -16,17 +16,17 @@ interface ChoreographyKeyframe {
 }
 
 const CHOREOGRAPHY_KEYFRAMES: readonly ChoreographyKeyframe[] = [
-  // Act 1 (0.00..0.22): Hero Reveal — starts closed, smoothly opens lid & wakes display
+  // Act 1 (0.00..0.22): Hero Reveal — starts sleek slightly ajar, smoothly opens lid & wakes display
   {
     progress: 0.0,
-    lidDeg: 6,
+    lidDeg: 14,
     xrayAmount: 0,
     dualDisplayProgress: 0,
     magsafeSnap: 0,
-    backlight: 0.15,
-    camPos: [2.65, 1.52, 4.35],
-    camTarget: [0, 0.25, -0.1],
-    modelRot: [0.05, -0.34, 0],
+    backlight: 0.25,
+    camPos: [2.55, 1.55, 4.15],
+    camTarget: [-0.28, 0.25, -0.05],
+    modelRot: [0.08, -0.38, 0],
   },
   {
     progress: 0.06,
