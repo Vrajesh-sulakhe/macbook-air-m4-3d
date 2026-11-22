@@ -251,3 +251,33 @@ export function createBeveledPlateGeometry(
   geo.computeVertexNormals();
   return geo;
 }
+
+/**
+ * Computes the hinge pivot X-rotation (radians) for a closed-flat lid extending along +Z
+ * with its inner display normal pointing -Y when closed:
+ * - 0° -> 0 rad (lid rests flush along +Z over base)
+ * - 130° -> -degToRad(130) (swings +Z upward into +Y and aims inner display normal toward +Z)
+ */
+export function computeHingeRotationX(lidDeg: number): number {
+  const clamped = THREE.MathUtils.clamp(lidDeg, 0, 130);
+  return -THREE.MathUtils.degToRad(clamped);
+}
+
+/**
+ * Computes the left-flank X coordinate of the MagSafe 3 plug as snap progresses 0 -> 1,
+ * sliding inward from detached (-width/2 - 0.55) to magnetically seated (-width/2 - 0.04).
+ */
+export function computeMagSafePlugOffsetX(chassisWidth: number, magsafeSnap: number): number {
+  const clamped = THREE.MathUtils.clamp(magsafeSnap, 0, 1);
+  const eased = THREE.MathUtils.smoothstep(clamped, 0, 1);
+  const leftFlankX = -chassisWidth * 0.5;
+  return THREE.MathUtils.lerp(leftFlankX - 0.55, leftFlankX - 0.04, eased);
+}
+
+/**
+ * Computes amber -> emerald LED charge transition factor (0 while approaching, 1 when snapped).
+ */
+export function computeMagSafeChargeBlend(magsafeSnap: number): number {
+  const clamped = THREE.MathUtils.clamp(magsafeSnap, 0, 1);
+  return THREE.MathUtils.smoothstep(clamped, 0.82, 0.96);
+}

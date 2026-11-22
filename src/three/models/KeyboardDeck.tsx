@@ -255,6 +255,7 @@ export function KeyboardDeck({
       <instancedMesh
         ref={instancedRef}
         args={[geometries.keycap, undefined, keycaps.length]}
+        frustumCulled={false}
         castShadow={false}
         receiveShadow
       >

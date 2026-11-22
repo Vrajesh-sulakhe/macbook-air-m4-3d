@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { FINISH_PALETTES, type FinishId } from '../../data/macbookSpecs';
 import type { TimelineState } from '../types';
+import { computeMagSafeChargeBlend, computeMagSafePlugOffsetX } from './dimensions';
 
 export interface PortsAndMagSafeProps {
   timelineRef: MutableRefObject<TimelineState>;
@@ -122,9 +123,8 @@ export function PortsAndMagSafe({
     }
 
     plugGroup.visible = true;
-    const easedSnap = THREE.MathUtils.smoothstep(snap, 0.02, 1);
-    const hoverOffset = THREE.MathUtils.lerp(-0.48, -0.052, easedSnap);
-    plugGroup.position.set(leftWallX + hoverOffset, portY, MAGSAFE_Z);
+    const plugX = computeMagSafePlugOffsetX(chassisWidth, snap);
+    plugGroup.position.set(plugX, portY, MAGSAFE_Z);
 
     const plugOpacity = THREE.MathUtils.clamp((snap - 0.015) / 0.16, 0, 1);
     if (plugBodyMatRef.current) {
@@ -134,7 +134,7 @@ export function PortsAndMagSafe({
     }
     if (cableMatRef.current) cableMatRef.current.opacity = plugOpacity;
     if (ledMatRef.current) {
-      const chargePhase = THREE.MathUtils.smoothstep(snap, 0.78, 0.98);
+      const chargePhase = computeMagSafeChargeBlend(snap);
       ledScratch.copy(amberColor).lerp(emeraldColor, chargePhase);
       ledMatRef.current.color.copy(ledScratch);
       ledMatRef.current.emissive.copy(ledScratch);
@@ -177,7 +177,7 @@ export function PortsAndMagSafe({
       ))}
 
       {/* Animated Snap-In Braided MagSafe 3 Connector */}
-      <group ref={plugGroupRef} position={[leftWallX - 0.48, portY, MAGSAFE_Z]} visible={false}>
+      <group ref={plugGroupRef} position={[leftWallX - 0.55, portY, MAGSAFE_Z]} visible={false}>
         <mesh geometry={geometries.plugShell}>
           <meshStandardMaterial
             ref={plugBodyMatRef}

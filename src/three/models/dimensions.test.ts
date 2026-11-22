@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import {
+  computeHingeRotationX,
+  computeMagSafeChargeBlend,
+  computeMagSafePlugOffsetX,
   createBeveledPlateGeometry,
   generateKeycapLayout,
   getChassisMetrics,
@@ -86,5 +89,52 @@ describe('MacBook Air procedural dimensions and keycap grid', () => {
     expect(size.z).toBeCloseTo(m13.depth, 2);
 
     plate.dispose();
+  });
+
+  it('rotates the lid upward into +Y with inner display normal aiming toward +Z as lidDeg opens 0 -> 130', () => {
+    const closedRot = computeHingeRotationX(0);
+    expect(closedRot).toBeCloseTo(0, 6);
+
+    const closedLidVec = new THREE.Vector3(0, 0, 1).applyEuler(new THREE.Euler(closedRot, 0, 0));
+    const closedNormal = new THREE.Vector3(0, -1, 0).applyEuler(new THREE.Euler(closedRot, 0, 0));
+    expect(closedLidVec.z).toBeCloseTo(1, 5);
+    expect(closedLidVec.y).toBeCloseTo(0, 5);
+    expect(closedNormal.y).toBeCloseTo(-1, 5);
+
+    const open108Rot = computeHingeRotationX(108);
+    expect(open108Rot).toBeLessThan(0);
+    const openLidVec = new THREE.Vector3(0, 0, 1).applyEuler(new THREE.Euler(open108Rot, 0, 0));
+    const openNormal = new THREE.Vector3(0, -1, 0).applyEuler(new THREE.Euler(open108Rot, 0, 0));
+    expect(openLidVec.y).toBeGreaterThan(0.9);
+    expect(openNormal.z).toBeGreaterThan(0.9);
+    expect(openNormal.y).toBeGreaterThan(0.25);
+
+    // Out-of-bounds angles clamp cleanly to [0, 130]
+    expect(computeHingeRotationX(-20)).toBeCloseTo(0, 6);
+    expect(computeHingeRotationX(180)).toBeCloseTo(computeHingeRotationX(130), 6);
+    const maxOpenNormal = new THREE.Vector3(0, -1, 0).applyEuler(
+      new THREE.Euler(computeHingeRotationX(130), 0, 0),
+    );
+    expect(maxOpenNormal.z).toBeGreaterThan(0.7);
+  });
+
+  it('slides MagSafe 3 plug inward toward -width/2 and transitions LED from amber to emerald when snapped', () => {
+    const { width } = getChassisMetrics('13');
+    const leftFlankX = -width * 0.5;
+
+    const detachedX = computeMagSafePlugOffsetX(width, 0);
+    const midX = computeMagSafePlugOffsetX(width, 0.5);
+    const seatedX = computeMagSafePlugOffsetX(width, 1);
+
+    expect(detachedX).toBeCloseTo(leftFlankX - 0.55, 5);
+    expect(seatedX).toBeCloseTo(leftFlankX - 0.04, 5);
+    expect(midX).toBeGreaterThan(detachedX);
+    expect(seatedX).toBeGreaterThan(midX);
+    expect(seatedX).toBeLessThan(leftFlankX);
+
+    expect(computeMagSafeChargeBlend(0.5)).toBe(0);
+    expect(computeMagSafeChargeBlend(0.82)).toBe(0);
+    expect(computeMagSafeChargeBlend(0.9)).toBeGreaterThan(0.5);
+    expect(computeMagSafeChargeBlend(1)).toBe(1);
   });
 });

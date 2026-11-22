@@ -17,6 +17,7 @@ import {
 } from '../textures/proceduralMaps';
 import type { TimelineState } from '../types';
 import {
+  computeHingeRotationX,
   createBeveledPlateGeometry,
   createRoundedRectShape,
   getChassisMetrics,
@@ -74,7 +75,6 @@ export function MacBookAirAssembly({
   const xraySmooth = useRef(0);
   const dualSmooth = useRef(0);
   const haloSmooth = useRef(0);
-  const baseTransparentMode = useRef(false);
 
   const baseMetrics = useMemo(() => getChassisMetrics('13'), []);
   const targetMetrics = useMemo(() => getChassisMetrics(size), [size]);
@@ -82,7 +82,7 @@ export function MacBookAirAssembly({
   const lidHeight = baseMetrics.depth - 0.02;
   const screenWidth = baseMetrics.width - 0.131; // 2.910
   const screenHeight = 1.89; // exact 1024x665 aspect ratio
-  const screenCenterY = lidHeight * 0.5 + 0.032;
+  const screenCenterZ = lidHeight * 0.5 + 0.032;
 
   const geometries = useMemo(() => {
     const baseBody = createBeveledPlateGeometry(
@@ -93,7 +93,8 @@ export function MacBookAirAssembly({
       0.0085,
     );
 
-    // Lid stands along +Y from [0..lidHeight] and spans z in [-lidThickness..0]
+    // Lid extends forward along +Z from rear hinge (0..lidHeight) with y in [0..lidThickness]:
+    // outer shell faces +Y and inner glass faces -Y when closed (rotX = 0)
     const lidBody = createBeveledPlateGeometry(
       baseMetrics.width,
       lidHeight,
@@ -101,8 +102,7 @@ export function MacBookAirAssembly({
       baseMetrics.cornerRadius,
       0.007,
     );
-    lidBody.rotateX(Math.PI / 2);
-    lidBody.translate(0, lidHeight * 0.5, -baseMetrics.lidThickness);
+    lidBody.translate(0, 0, lidHeight * 0.5);
     lidBody.computeVertexNormals();
 
     const hingeBarrel = new THREE.CylinderGeometry(0.021, 0.021, 1.94, 24);
@@ -245,7 +245,7 @@ export function MacBookAirAssembly({
     const rawLidDeg = manualLidAngleDeg !== null ? manualLidAngleDeg : timeline.lidDeg;
     const clampedLidDeg = THREE.MathUtils.clamp(rawLidDeg, 0, 130);
     if (lidPivotRef.current) {
-      const targetLidRotX = THREE.MathUtils.degToRad(90 - clampedLidDeg);
+      const targetLidRotX = computeHingeRotationX(clampedLidDeg);
       lidPivotRef.current.rotation.x = THREE.MathUtils.lerp(
         lidPivotRef.current.rotation.x,
         targetLidRotX,
@@ -269,39 +269,29 @@ export function MacBookAirAssembly({
     targetColorScratch.set(palette.hex);
     targetRimScratch.set(palette.rimTint);
 
-    if (baseMaterialRef.current) {
-      const mat = baseMaterialRef.current;
+    const updateAnodizedMaterial = (mat: THREE.MeshStandardMaterial | null, opacity: number) => {
+      if (!mat) {
+        return;
+      }
       mat.color.lerp(targetColorScratch, lerpAlpha);
       mat.roughness = THREE.MathUtils.lerp(mat.roughness, palette.roughness, lerpAlpha);
       mat.metalness = THREE.MathUtils.lerp(mat.metalness, palette.metalness, lerpAlpha);
-      if (baseTransparentMode.current !== shouldBaseBeTransparent) {
+      if (mat.transparent !== shouldBaseBeTransparent) {
         mat.transparent = shouldBaseBeTransparent;
         mat.depthWrite = !shouldBaseBeTransparent;
         mat.needsUpdate = true;
       }
-      mat.opacity = 1 - xray * 0.84;
-    }
+      mat.opacity = THREE.MathUtils.clamp(opacity, 0.04, 1);
+    };
 
-    if (lidMaterialRef.current) {
-      const lidMat = lidMaterialRef.current;
-      lidMat.color.lerp(targetColorScratch, lerpAlpha);
-      lidMat.roughness = THREE.MathUtils.lerp(lidMat.roughness, palette.roughness, lerpAlpha);
-      lidMat.metalness = THREE.MathUtils.lerp(lidMat.metalness, palette.metalness, lerpAlpha);
-      if (baseTransparentMode.current !== shouldBaseBeTransparent) {
-        lidMat.transparent = shouldBaseBeTransparent;
-        lidMat.depthWrite = !shouldBaseBeTransparent;
-        lidMat.needsUpdate = true;
-      }
-      lidMat.opacity = 1 - xray * 0.28;
-    }
+    updateAnodizedMaterial(baseMaterialRef.current, 1 - xray * 0.84);
+    updateAnodizedMaterial(lidMaterialRef.current, 1 - xray * 0.28);
 
     if (baseWireMatRef.current) {
       baseWireMatRef.current.visible = xray > 0.02;
       baseWireMatRef.current.opacity = xray * 0.28;
       baseWireMatRef.current.color.lerp(targetRimScratch, lerpAlpha);
     }
-
-    baseTransparentMode.current = shouldBaseBeTransparent;
 
     // 5. Dynamic Liquid Retina ScreenCanvasRenderer update
     const activeMode = isStudioInteractive ? screenMode : timeline.activeScreenMode;
@@ -432,11 +422,16 @@ export function MacBookAirAssembly({
           reducedMotion={reducedMotion}
         />
 
-        {/* Articulated Display Lid Pivot (0° closed -> 130° open) */}
+        {/*
+          Articulated Display Lid Pivot at rear hinge (-Z):
+          Local lid extends forward along +Z (0..lidHeight) with outer shell facing +Y and
+          inner screen facing -Y when closed (rotation.x = 0). Negative X-rotation swings
+          +Z upward into +Y and aims the inner -Y screen face forward toward +Z.
+        */}
         <group
           ref={lidPivotRef}
           position={[0, baseMetrics.baseThickness + 0.0085, -baseMetrics.depth * 0.5 + 0.02]}
-          rotation={[Math.PI / 2, 0, 0]}
+          rotation={[0, 0, 0]}
         >
           {/* Anodized aluminum lid shell */}
           <mesh geometry={geometries.lidBody} castShadow receiveShadow>
@@ -448,26 +443,38 @@ export function MacBookAirAssembly({
             />
           </mesh>
 
-          {/* Outer lid sleek mirror-metallic minimal emblem inlay */}
+          {/* Outer lid sleek mirror-metallic minimal emblem inlay (faces +Y closed / -Z open) */}
           <group
-            position={[0, lidHeight * 0.5, -baseMetrics.lidThickness - 0.0008]}
-            rotation={[0, Math.PI, 0]}
+            position={[0, baseMetrics.lidThickness + 0.0008, lidHeight * 0.5]}
+            rotation={[-Math.PI / 2, 0, Math.PI]}
           >
             <mesh geometry={geometries.emblemCircle}>
               <meshStandardMaterial color="#e2e8f0" metalness={0.98} roughness={0.06} />
             </mesh>
-            <mesh geometry={geometries.emblemLeaf} position={[0.028, 0.145, 0.0004]} rotation={[0, 0, -0.42]}>
+            <mesh
+              geometry={geometries.emblemLeaf}
+              position={[0.028, 0.145, 0.0004]}
+              rotation={[0, 0, -0.42]}
+            >
               <meshStandardMaterial color="#e2e8f0" metalness={0.98} roughness={0.06} />
             </mesh>
           </group>
 
-          {/* Inner glossy black display glass bezel */}
-          <mesh geometry={geometries.bezelPlane} position={[0, lidHeight * 0.5, 0.0006]}>
+          {/* Inner glossy black display glass bezel (faces -Y closed / +Z open) */}
+          <mesh
+            geometry={geometries.bezelPlane}
+            position={[0, -0.0006, lidHeight * 0.5]}
+            rotation={[Math.PI / 2, 0, 0]}
+          >
             <meshStandardMaterial color="#050608" roughness={0.08} metalness={0.18} />
           </mesh>
 
           {/* Dynamic 1024x665 Liquid Retina display */}
-          <mesh geometry={geometries.screenPlane} position={[0, screenCenterY, 0.0014]}>
+          <mesh
+            geometry={geometries.screenPlane}
+            position={[0, -0.0014, screenCenterZ]}
+            rotation={[Math.PI / 2, 0, 0]}
+          >
             <meshStandardMaterial
               ref={screenMatRef}
               color="#141418"
@@ -483,12 +490,16 @@ export function MacBookAirAssembly({
             ref={haloMeshRef}
             geometry={geometries.haloPlane}
             material={haloMaterial}
-            position={[0, screenCenterY, 0.0024]}
+            position={[0, -0.0024, screenCenterZ]}
+            rotation={[Math.PI / 2, 0, 0]}
             visible={false}
           />
 
           {/* macOS top notch + 12MP Center Stage lens + green privacy LED */}
-          <group position={[0, screenCenterY + screenHeight * 0.5 - 0.026, 0.0028]}>
+          <group
+            position={[0, -0.0028, screenCenterZ + screenHeight * 0.5 - 0.026]}
+            rotation={[Math.PI / 2, 0, 0]}
+          >
             <mesh geometry={geometries.cameraNotch}>
               <meshBasicMaterial color="#050608" />
             </mesh>
