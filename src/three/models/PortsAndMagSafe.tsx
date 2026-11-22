@@ -3,7 +3,32 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { FINISH_PALETTES, type FinishId } from '../../data/macbookSpecs';
 import type { TimelineState } from '../types';
-import { computeMagSafeChargeBlend, computeMagSafePlugOffsetX } from './dimensions';
+import {
+  computeMagSafeChargeBlend,
+  computeMagSafePlugOffsetX,
+  createRoundedRectShape,
+} from './dimensions';
+
+function createHollowStadiumFrameGeometry(
+  outerWidthZ: number,
+  outerHeightY: number,
+  innerWidthZ: number,
+  innerHeightY: number,
+  depthX: number,
+): THREE.ExtrudeGeometry {
+  const outer = createRoundedRectShape(outerWidthZ, outerHeightY, outerHeightY * 0.5);
+  const inner = createRoundedRectShape(innerWidthZ, innerHeightY, innerHeightY * 0.5);
+  outer.holes.push(inner);
+
+  const geo = new THREE.ExtrudeGeometry(outer, {
+    depth: depthX,
+    bevelEnabled: false,
+    curveSegments: 14,
+  });
+  geo.rotateY(-Math.PI / 2);
+  geo.computeVertexNormals();
+  return geo;
+}
 
 export interface PortsAndMagSafeProps {
   timelineRef: MutableRefObject<TimelineState>;
@@ -40,14 +65,14 @@ export function PortsAndMagSafe({
   const plugColorScratch = useMemo(() => new THREE.Color(), []);
 
   const geometries = useMemo(() => {
-    const magsafeFrame = new THREE.BoxGeometry(0.012, 0.026, 0.138);
-    const magsafeSlot = new THREE.BoxGeometry(0.014, 0.018, 0.122);
-    const magsafePin = new THREE.CylinderGeometry(0.0028, 0.0028, 0.008, 10);
+    const magsafeFrame = createHollowStadiumFrameGeometry(0.138, 0.028, 0.122, 0.019, 0.0075);
+    const magsafeSlot = new THREE.BoxGeometry(0.003, 0.019, 0.122);
+    const magsafePin = new THREE.CylinderGeometry(0.0026, 0.0026, 0.0035, 10);
     magsafePin.rotateZ(Math.PI / 2);
 
-    const tbFrame = new THREE.BoxGeometry(0.01, 0.024, 0.088);
-    const tbCavity = new THREE.BoxGeometry(0.012, 0.016, 0.074);
-    const tbTongue = new THREE.BoxGeometry(0.01, 0.004, 0.058);
+    const tbFrame = createHollowStadiumFrameGeometry(0.088, 0.025, 0.074, 0.017, 0.007);
+    const tbCavity = new THREE.BoxGeometry(0.003, 0.017, 0.074);
+    const tbTongue = new THREE.BoxGeometry(0.0035, 0.004, 0.056);
 
     const plugShell = new THREE.BoxGeometry(0.115, 0.028, 0.13);
     const plugCollar = new THREE.CylinderGeometry(0.012, 0.014, 0.036, 16);
@@ -55,7 +80,7 @@ export function PortsAndMagSafe({
     const plugLed = new THREE.BoxGeometry(0.028, 0.005, 0.012);
 
     const cableCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-0.088, 0, 0),
+      new THREE.Vector3(-0.082, 0, 0),
       new THREE.Vector3(-0.24, -0.012, 0.02),
       new THREE.Vector3(-0.46, -0.055, 0.07),
       new THREE.Vector3(-0.78, -0.095, 0.15),
@@ -64,7 +89,7 @@ export function PortsAndMagSafe({
 
     const jackRing = new THREE.RingGeometry(0.015, 0.022, 24);
     jackRing.rotateY(Math.PI / 2);
-    const jackBore = new THREE.CylinderGeometry(0.015, 0.015, 0.014, 24);
+    const jackBore = new THREE.CylinderGeometry(0.015, 0.015, 0.004, 24);
     jackBore.rotateZ(Math.PI / 2);
 
     return {
@@ -148,14 +173,14 @@ export function PortsAndMagSafe({
     <group name="ports-and-magsafe">
       {/* Left Flank: MagSafe 3 Recessed Housing + 5 Gold Pogo Pins */}
       <group position={[leftWallX, portY, MAGSAFE_Z]}>
-        <mesh geometry={geometries.magsafeFrame} position={[-0.001, 0, 0]}>
+        <mesh geometry={geometries.magsafeFrame} position={[0, 0, 0]}>
           <meshStandardMaterial color="#1a1f29" roughness={0.35} metalness={0.78} />
         </mesh>
         <mesh geometry={geometries.magsafeSlot} position={[-0.002, 0, 0]}>
           <meshStandardMaterial color="#07090d" roughness={0.65} metalness={0.2} />
         </mesh>
         {[-0.036, -0.018, 0, 0.018, 0.036].map((pinZ, idx) => (
-          <mesh key={idx} geometry={geometries.magsafePin} position={[-0.004, 0, pinZ]}>
+          <mesh key={idx} geometry={geometries.magsafePin} position={[-0.0052, 0, pinZ]}>
             <meshStandardMaterial color="#e6be6a" roughness={0.25} metalness={0.95} />
           </mesh>
         ))}
@@ -164,13 +189,13 @@ export function PortsAndMagSafe({
       {/* Left Flank: 2× Thunderbolt 4 / USB 4 Ports */}
       {THUNDERBOLT_Z_POSITIONS.map((zPos, idx) => (
         <group key={idx} position={[leftWallX, portY, zPos]}>
-          <mesh geometry={geometries.tbFrame} position={[-0.001, 0, 0]}>
+          <mesh geometry={geometries.tbFrame} position={[0, 0, 0]}>
             <meshStandardMaterial color="#181d26" roughness={0.38} metalness={0.72} />
           </mesh>
           <mesh geometry={geometries.tbCavity} position={[-0.002, 0, 0]}>
             <meshStandardMaterial color="#06080c" roughness={0.7} metalness={0.15} />
           </mesh>
-          <mesh geometry={geometries.tbTongue} position={[-0.0025, 0, 0]}>
+          <mesh geometry={geometries.tbTongue} position={[-0.0052, 0, 0]}>
             <meshStandardMaterial color="#cbd5e1" roughness={0.26} metalness={0.85} />
           </mesh>
         </group>
@@ -216,10 +241,10 @@ export function PortsAndMagSafe({
 
       {/* Right Flank: 3.5mm High-Impedance Headphone Jack */}
       <group position={[rightWallX, portY, AUDIO_JACK_Z]}>
-        <mesh geometry={geometries.jackRing} position={[0.001, 0, 0]}>
+        <mesh geometry={geometries.jackRing} position={[0.0015, 0, 0]}>
           <meshStandardMaterial color="#94a3b8" roughness={0.28} metalness={0.9} />
         </mesh>
-        <mesh geometry={geometries.jackBore} position={[-0.002, 0, 0]}>
+        <mesh geometry={geometries.jackBore} position={[-0.001, 0, 0]}>
           <meshStandardMaterial color="#050608" roughness={0.8} metalness={0.1} />
         </mesh>
       </group>

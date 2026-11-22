@@ -383,7 +383,7 @@ export function MacBookAirAssembly({
         {/* Front palm-rest thumb scoop indent */}
         <mesh
           geometry={geometries.thumbNotch}
-          position={[0, baseMetrics.baseThickness - 0.002, baseMetrics.depth * 0.5 - 0.022]}
+          position={[0, baseMetrics.baseThickness - 0.0032, baseMetrics.depth * 0.5 - 0.028]}
         >
           <meshStandardMaterial color="#0d1118" roughness={0.45} metalness={0.45} />
         </mesh>
@@ -403,6 +403,7 @@ export function MacBookAirAssembly({
           manualXray={manualXray}
           deckY={baseMetrics.baseThickness}
           finish={finish}
+          reducedMotion={reducedMotion}
         />
 
         {/* Fanless M4 Silicon + Logic Board Internal Bay */}
@@ -411,6 +412,7 @@ export function MacBookAirAssembly({
           manualXray={manualXray}
           finish={finish}
           baseThickness={baseMetrics.baseThickness}
+          reducedMotion={reducedMotion}
         />
 
         {/* MagSafe 3 + Dual Thunderbolt 4 + 3.5mm Audio Jack */}

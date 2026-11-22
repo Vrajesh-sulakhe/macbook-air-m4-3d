@@ -16,6 +16,7 @@ export interface KeyboardDeckProps {
   manualXray: boolean | null;
   deckY: number;
   finish: FinishId;
+  reducedMotion: boolean;
 }
 
 function createSculptedUnitKeycapGeometry(): THREE.BufferGeometry {
@@ -44,6 +45,7 @@ export function KeyboardDeck({
   manualXray,
   deckY,
   finish,
+  reducedMotion,
 }: KeyboardDeckProps) {
   const instancedRef = useRef<THREE.InstancedMesh | null>(null);
   const backlightMatRef = useRef<THREE.MeshBasicMaterial | null>(null);
@@ -157,7 +159,7 @@ export function KeyboardDeck({
 
   useFrame((_, delta) => {
     const dt = Math.min(delta, 0.05);
-    const lerpAlpha = 1 - Math.exp(-10 * dt);
+    const lerpAlpha = reducedMotion ? 1 : 1 - Math.exp(-10 * dt);
 
     const targetBacklight =
       manualBacklight !== null ? (manualBacklight ? 1 : 0) : timelineRef.current.backlight;

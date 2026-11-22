@@ -11,6 +11,7 @@ export interface M4InternalBayProps {
   manualXray: boolean | null;
   finish: FinishId;
   baseThickness: number;
+  reducedMotion: boolean;
 }
 
 const BATTERY_PACK_X_POSITIONS = [-0.94, -0.34, 0.34, 0.94] as const;
@@ -71,6 +72,7 @@ export function M4InternalBay({
   manualXray,
   finish,
   baseThickness,
+  reducedMotion,
 }: M4InternalBayProps) {
   const bayGroupRef = useRef<THREE.Group | null>(null);
   const pcbMatRef = useRef<THREE.MeshStandardMaterial | null>(null);
@@ -171,7 +173,7 @@ export function M4InternalBay({
 
   useFrame((state, delta) => {
     const dt = Math.min(delta, 0.05);
-    const lerpAlpha = 1 - Math.exp(-10 * dt);
+    const lerpAlpha = reducedMotion ? 1 : 1 - Math.exp(-10 * dt);
     const targetXray = manualXray !== null ? (manualXray ? 1 : 0) : timelineRef.current.xrayAmount;
 
     xraySmooth.current = THREE.MathUtils.lerp(
@@ -203,7 +205,7 @@ export function M4InternalBay({
     if (substrateMatRef.current) substrateMatRef.current.opacity = fadeOpacity;
 
     accentColorScratch.set(FINISH_PALETTES[finish].rimTint);
-    circuitMaterial.uniforms.uTime.value = state.clock.elapsedTime;
+    circuitMaterial.uniforms.uTime.value = reducedMotion ? 0 : state.clock.elapsedTime;
     circuitMaterial.uniforms.uPulseIntensity.value = xray * 1.25;
     (circuitMaterial.uniforms.uAccentColor.value as THREE.Color).copy(accentColorScratch);
   });
