@@ -71,7 +71,7 @@ void main() {
   float crispRim = 1.0 - smoothstep(0.006, 0.028, edgeDist);
 
   vec2 centered = vUv - 0.5;
-  float angle = atan(centered.y, centered.x);
+  float angle = dot(centered, centered) > 1e-6 ? atan(centered.y, centered.x) : 0.0;
   float wave = 0.5 + 0.5 * sin(angle * 2.0 - uTime * 1.45);
   float secondary = 0.5 + 0.5 * cos(angle * 3.0 + uTime * 1.1);
 
@@ -87,6 +87,7 @@ void main() {
   float breath = 0.85 + 0.15 * sin(uTime * 2.2);
   float intensity = (innerGlow * 0.52 + crispRim * 0.85) * outerFeather * breath;
   float alpha = clamp(intensity * clamp(uOpacity, 0.0, 1.0), 0.0, 1.0);
+  if (alpha <= 0.0001) discard;
 
   gl_FragColor = vec4(haloColor * alpha * 1.35, alpha);
 }
@@ -141,6 +142,7 @@ export function createM4CircuitShaderMaterial(): THREE.ShaderMaterial {
     transparent: true,
     depthWrite: false,
     blending: THREE.AdditiveBlending,
+    premultipliedAlpha: true,
     side: THREE.DoubleSide,
   });
 }
@@ -159,6 +161,7 @@ export function createIntelligenceHaloMaterial(): THREE.ShaderMaterial {
     transparent: true,
     depthWrite: false,
     blending: THREE.AdditiveBlending,
+    premultipliedAlpha: true,
     side: THREE.DoubleSide,
   });
 }

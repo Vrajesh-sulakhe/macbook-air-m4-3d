@@ -213,17 +213,23 @@ describe('proceduralMaps and custom GLSL shaders', () => {
     expect(m4.uniforms.uAccentColor.value).toBeInstanceOf(THREE.Color);
     expect(m4.transparent).toBe(true);
     expect(m4.depthWrite).toBe(false);
+    expect(m4.blending).toBe(THREE.AdditiveBlending);
+    expect(m4.premultipliedAlpha).toBe(true);
 
     expect(halo.uniforms.uTime.value).toBe(0);
     expect(halo.uniforms.uOpacity.value).toBeTypeOf('number');
     expect(halo.transparent).toBe(true);
     expect(halo.depthWrite).toBe(false);
+    expect(halo.blending).toBe(THREE.AdditiveBlending);
+    expect(halo.premultipliedAlpha).toBe(true);
 
     expect(holo.uniforms.uTime.value).toBe(0);
     expect(holo.uniforms.uOpacity.value).toBeTypeOf('number');
     expect(holo.uniforms.uAccentColor.value).toBeInstanceOf(THREE.Color);
     expect(holo.transparent).toBe(true);
     expect(holo.depthWrite).toBe(false);
+    expect(holo.blending).toBe(THREE.NormalBlending);
+    expect(holo.premultipliedAlpha).toBe(false);
 
     // Uniform mutations behave cleanly
     m4.uniforms.uTime.value = 1.5;
@@ -246,6 +252,10 @@ describe('proceduralMaps and custom GLSL shaders', () => {
         expect(Number(match[1])).toBeLessThan(Number(match[2]));
       }
     }
+
+    // Verify Intelligence halo guards against atan(0.0, 0.0) NaN at vUv == (0.5, 0.5) and discards zero-alpha center
+    expect(halo.fragmentShader).toMatch(/dot\(centered,\s*centered\)\s*>\s*1e-6\s*\?\s*atan\(/);
+    expect(halo.fragmentShader).toContain('if (alpha <= 0.0001) discard;');
 
     m4.dispose();
     halo.dispose();
