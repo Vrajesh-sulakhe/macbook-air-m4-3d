@@ -102,15 +102,16 @@ export function StudioConfigurator({
   return (
     <div
       data-testid="studio-configurator"
-      className="w-full rounded-3xl border border-white/14 bg-[#0B0F17]/92 p-5 text-[#F5F5F7] shadow-[0_28px_80px_rgba(0,0,0,0.65)] backdrop-blur-2xl sm:p-7"
+      className="w-full rounded-[2rem] border border-white/10 bg-white/[0.04] p-1.5 shadow-[0_32px_90px_rgba(0,0,0,0.65)]"
     >
+      <div className="rounded-[calc(2rem-0.375rem)] bg-[#0B0F17]/96 p-5 text-[#F5F5F7] shadow-[inset_0_1px_1px_rgba(255,255,255,0.14)] sm:p-7">
       {/* Studio Header & Quick Exit */}
       <div className="flex flex-wrap items-start justify-between gap-3 border-b border-white/10 pb-4">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#7BB3E0]">
+          <span className="inline-flex items-center rounded-full border border-[#7BB3E0]/25 bg-[#7BB3E0]/10 px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-[#7BB3E0]">
             Interactive 3D Studio
-          </p>
-          <h2 className="mt-1 text-2xl font-semibold tracking-tight text-[#F5F5F7]">
+          </span>
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[#F5F5F7]">
             Configure MacBook Air M4
           </h2>
           <p className="mt-1 font-mono text-xs text-[#9BA3B4] tabular-nums">
@@ -459,12 +460,18 @@ export function StudioConfigurator({
         <button
           type="button"
           onClick={onReviewClick}
-          className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-[#F5F5F7] px-5 py-3 text-sm font-semibold text-[#050608] shadow-lg transition-colors hover:bg-[#DCEAF7]"
+          className="group inline-flex min-h-[48px] items-center justify-center gap-2.5 rounded-full bg-[#F5F5F7] pl-5 pr-2.5 py-2 text-sm font-semibold text-[#050608] shadow-lg transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-[#DCEAF7] active:scale-[0.98]"
         >
           <Check className="h-4 w-4 text-[#050608]" aria-hidden="true" />
           <span>Review Configuration</span>
-          <ChevronRight className="h-4 w-4" aria-hidden="true" />
+          <span
+            aria-hidden="true"
+            className="flex h-7 w-7 items-center justify-center rounded-full bg-[#050608]/10 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:-translate-y-[1px] group-hover:scale-105"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </span>
         </button>
+      </div>
       </div>
     </div>
   );

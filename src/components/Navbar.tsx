@@ -76,9 +76,15 @@ export function Navbar({ activeActIndex, finish, onNavigate }: NavbarProps) {
         <button
           type="button"
           onClick={() => onNavigate('studio')}
-          className="inline-flex min-h-[44px] shrink-0 items-center justify-center rounded-full bg-[#F5F5F7] px-3 text-xs font-semibold tracking-tight whitespace-nowrap text-[#050608] tabular-nums transition-colors hover:bg-[#DCEAF7] sm:px-4"
+          className="group inline-flex min-h-[44px] shrink-0 items-center justify-center gap-2 rounded-full bg-[#F5F5F7] pl-4 pr-2 text-xs font-semibold tracking-tight whitespace-nowrap text-[#050608] tabular-nums transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-[#DCEAF7] active:scale-[0.98] sm:pl-4 sm:pr-2.5"
         >
-          {`Configure · From $${startingPrice}`}
+          <span>{`Configure · From $${startingPrice}`}</span>
+          <span
+            aria-hidden="true"
+            className="flex h-6 w-6 items-center justify-center rounded-full bg-[#050608]/10 text-[11px] transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:-translate-y-[1px]"
+          >
+            ↗
+          </span>
         </button>
       </nav>
     </header>

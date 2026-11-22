@@ -96,8 +96,9 @@ export function SummaryModal({ isOpen, config, onClose }: SummaryModalProps) {
         aria-modal="true"
         aria-labelledby="summary-modal-title"
         onClick={(event) => event.stopPropagation()}
-        className="w-full max-w-lg rounded-3xl border border-white/15 bg-[#0D121B] p-6 text-[#F5F5F7] shadow-[0_32px_90px_rgba(0,0,0,0.75)] sm:p-8"
+        className="w-full max-w-lg rounded-[2rem] border border-white/12 bg-white/[0.04] p-1.5 shadow-[0_32px_90px_rgba(0,0,0,0.75)]"
       >
+        <div className="rounded-[calc(2rem-0.375rem)] bg-[#0D121B] p-6 text-[#F5F5F7] shadow-[inset_0_1px_1px_rgba(255,255,255,0.14)] sm:p-8">
         <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-4">
           <div>
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#7BB3E0]">
@@ -190,10 +191,11 @@ export function SummaryModal({ isOpen, config, onClose }: SummaryModalProps) {
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#7BB3E0] px-5 text-xs font-semibold text-[#050608] transition-colors hover:bg-[#99C7EB]"
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#7BB3E0] px-5 text-xs font-semibold text-[#050608] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-[#99C7EB] active:scale-[0.98]"
           >
             Done
           </button>
+        </div>
         </div>
       </div>
     </div>

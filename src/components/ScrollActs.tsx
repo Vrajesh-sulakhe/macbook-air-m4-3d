@@ -93,37 +93,45 @@ export function ScrollActs({ finish, onFinishPreview, onJumpToStudio }: ScrollAc
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050608]/85 via-[#050608]/25 to-transparent sm:bg-gradient-to-r sm:from-[#050608]/80 sm:via-[#050608]/30 sm:to-transparent"
         />
-        <div className="pointer-events-auto relative w-full max-w-lg rounded-3xl border border-white/12 bg-[#070A10]/72 p-6 text-[#F5F5F7] shadow-[0_24px_64px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:p-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#7BB3E0]">
-            Apple M4 Silicon
-          </p>
-          <h1
-            id="act-overview-heading"
-            className="mt-2 text-4xl font-semibold tracking-tight text-[#F5F5F7] sm:text-5xl lg:text-6xl"
-          >
-            MacBook Air M4
-          </h1>
-          <p className="mt-3 text-xl font-medium tracking-tight text-[#E2E8F0] sm:text-2xl">
-            Sky-high speed. Featherlight Air.
-          </p>
-          <p className="mt-3 text-sm text-[#9BA3B4] tabular-nums sm:text-base">
-            Supercharged by the M4 chip. Now in Sky Blue, starting at{' '}
-            <span className="font-semibold text-[#F5F5F7]">{`$${BASE_SPEC.basePrice}`}</span>.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              onClick={onJumpToStudio}
-              className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[#7BB3E0] px-5 py-2.5 text-sm font-semibold text-[#050608] transition-colors hover:bg-[#99C7EB]"
+        <div className="pointer-events-auto relative w-full max-w-lg rounded-[2rem] border border-white/10 bg-white/[0.04] p-1.5 shadow-[0_28px_80px_rgba(0,0,0,0.55)]">
+          <div className="rounded-[calc(2rem-0.375rem)] bg-[#070A10]/94 p-6 text-[#F5F5F7] shadow-[inset_0_1px_1px_rgba(255,255,255,0.14)] sm:p-8">
+            <span className="inline-flex items-center rounded-full border border-[#7BB3E0]/25 bg-[#7BB3E0]/10 px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-[#7BB3E0]">
+              Apple M4 Silicon
+            </span>
+            <h1
+              id="act-overview-heading"
+              className="mt-3 text-4xl font-semibold tracking-tight text-[#F5F5F7] sm:text-5xl lg:text-6xl"
             >
-              Explore in 3D
-            </button>
-            <a
-              href="#design"
-              className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-medium text-[#F5F5F7] transition-colors hover:bg-white/10"
-            >
-              Scroll to unveil
-            </a>
+              MacBook Air M4
+            </h1>
+            <p className="mt-3 text-xl font-medium tracking-tight text-[#E2E8F0] sm:text-2xl">
+              Sky-high speed. Featherlight Air.
+            </p>
+            <p className="mt-3 text-sm text-[#9BA3B4] tabular-nums sm:text-base">
+              Supercharged by the M4 chip. Now in Sky Blue, starting at{' '}
+              <span className="font-semibold text-[#F5F5F7]">{`$${BASE_SPEC.basePrice}`}</span>.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={onJumpToStudio}
+                className="group inline-flex min-h-[44px] items-center justify-center gap-2.5 rounded-full bg-[#7BB3E0] pl-5 pr-2 py-2 text-sm font-semibold text-[#050608] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-[#99C7EB] active:scale-[0.98]"
+              >
+                <span>Explore in 3D</span>
+                <span
+                  aria-hidden="true"
+                  className="flex h-7 w-7 items-center justify-center rounded-full bg-[#050608]/12 text-xs transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:-translate-y-[1px] group-hover:scale-105"
+                >
+                  ↗
+                </span>
+              </button>
+              <a
+                href="#design"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-medium text-[#F5F5F7] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-white/10 active:scale-[0.98]"
+              >
+                Scroll to unveil
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -134,16 +142,17 @@ export function ScrollActs({ finish, onFinishPreview, onJumpToStudio }: ScrollAc
         aria-labelledby="act-design-heading"
         className="pointer-events-none relative flex min-h-[145vh] items-center px-4 py-24 sm:px-8 lg:px-14"
       >
-        <div className="pointer-events-auto relative w-full max-w-lg rounded-3xl border border-[#101319]/12 bg-[#F4F6F9]/88 p-6 text-[#101319] shadow-[0_24px_64px_rgba(16,19,25,0.16)] backdrop-blur-xl sm:p-8 lg:ml-auto">
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#24537A]">
-            Anodized Unibody
-          </p>
-          <h2
-            id="act-design-heading"
-            className="mt-2 text-3xl font-semibold tracking-tight text-[#101319] sm:text-4xl"
-          >
-            Razor-thin craft. Four signature finishes.
-          </h2>
+        <div className="pointer-events-auto relative w-full max-w-lg rounded-[2rem] border border-[#101319]/10 bg-[#101319]/[0.03] p-1.5 shadow-[0_24px_64px_rgba(16,19,25,0.12)] lg:ml-auto">
+          <div className="rounded-[calc(2rem-0.375rem)] bg-[#F7F9FC]/96 p-6 text-[#101319] shadow-[inset_0_1px_1px_rgba(255,255,255,0.95)] sm:p-8">
+            <span className="inline-flex items-center rounded-full border border-[#24537A]/20 bg-[#24537A]/8 px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-[#24537A]">
+              Anodized Unibody
+            </span>
+            <h2
+              id="act-design-heading"
+              className="mt-3 text-3xl font-semibold tracking-tight text-[#101319] sm:text-4xl"
+            >
+              Razor-thin craft. Four signature finishes.
+            </h2>
           <p className="mt-3 text-sm text-[#475569] sm:text-base">
             Precision-milled from recycled aluminum into a whisper-quiet enclosure built to go
             everywhere effortlessly.
@@ -186,10 +195,11 @@ export function ScrollActs({ finish, onFinishPreview, onJumpToStudio }: ScrollAc
               })}
             </div>
           </div>
+          </div>
         </div>
       </section>
 
-      {/* Act 3: M4 Silicon X-Ray Cutaway — Dark Deep Slate Blueprint */}
+      {/* Act 3: M4 Silicon X-Ray Cutaway */}
       <section
         id="silicon"
         aria-labelledby="act-silicon-heading"
@@ -199,16 +209,17 @@ export function ScrollActs({ finish, onFinishPreview, onJumpToStudio }: ScrollAc
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#080C14]/70 via-transparent to-transparent"
         />
-        <div className="pointer-events-auto relative w-full max-w-lg rounded-3xl border border-[#38BDF8]/25 bg-[#080C14]/82 p-6 text-[#F5F5F7] shadow-[0_24px_64px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:p-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#38BDF8]">
-            M4 Silicon Architecture
-          </p>
-          <h2
-            id="act-silicon-heading"
-            className="mt-2 text-3xl font-semibold tracking-tight text-[#F5F5F7] sm:text-4xl"
-          >
-            Silent power, re-architected inside.
-          </h2>
+        <div className="pointer-events-auto relative w-full max-w-lg rounded-[2rem] border border-[#38BDF8]/20 bg-white/[0.03] p-1.5 shadow-[0_28px_80px_rgba(0,0,0,0.6)]">
+          <div className="rounded-[calc(2rem-0.375rem)] bg-[#080C14]/94 p-6 text-[#F5F5F7] shadow-[inset_0_1px_1px_rgba(56,189,248,0.16)] sm:p-8">
+            <span className="inline-flex items-center rounded-full border border-[#38BDF8]/25 bg-[#38BDF8]/10 px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-[#38BDF8]">
+              M4 Silicon Architecture
+            </span>
+            <h2
+              id="act-silicon-heading"
+              className="mt-3 text-3xl font-semibold tracking-tight text-[#F5F5F7] sm:text-4xl"
+            >
+              Silent power, re-architected inside.
+            </h2>
           <p className="mt-3 text-sm text-[#9BA3B4] sm:text-base">
             Beneath the graphite thermal spreader sits Apple M4, pairing hardware ray tracing with
             a next-generation Neural Engine.
@@ -237,6 +248,7 @@ export function ScrollActs({ finish, onFinishPreview, onJumpToStudio }: ScrollAc
               </div>
             ))}
           </dl>
+          </div>
         </div>
       </section>
 
@@ -250,22 +262,24 @@ export function ScrollActs({ finish, onFinishPreview, onJumpToStudio }: ScrollAc
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050608]/75 via-transparent to-transparent sm:bg-gradient-to-r sm:from-[#090B10]/70 sm:via-transparent sm:to-transparent"
         />
-        <div className="pointer-events-auto relative w-full max-w-lg rounded-3xl border border-white/15 bg-[#090B10]/82 p-6 text-[#F5F5F7] shadow-[0_24px_64px_rgba(0,0,0,0.6)] backdrop-blur-xl sm:p-8">
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#7BB3E0]">
-            Liquid Retina Display
-          </p>
-          <h2
-            id="act-display-heading"
-            className="mt-2 text-3xl font-semibold tracking-tight text-[#F5F5F7] sm:text-4xl"
-          >
-            Crisp 1 billion colors. Two external 6K displays.
-          </h2>
+        <div className="pointer-events-auto relative w-full max-w-lg rounded-[2rem] border border-white/10 bg-white/[0.04] p-1.5 shadow-[0_28px_80px_rgba(0,0,0,0.6)]">
+          <div className="rounded-[calc(2rem-0.375rem)] bg-[#090B10]/94 p-6 text-[#F5F5F7] shadow-[inset_0_1px_1px_rgba(255,255,255,0.14)] sm:p-8">
+            <span className="inline-flex items-center rounded-full border border-[#7BB3E0]/25 bg-[#7BB3E0]/10 px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-[#7BB3E0]">
+              Liquid Retina Display
+            </span>
+            <h2
+              id="act-display-heading"
+              className="mt-3 text-3xl font-semibold tracking-tight text-[#F5F5F7] sm:text-4xl"
+            >
+              Crisp 1 billion colors. Two external 6K displays.
+            </h2>
           <p className="mt-3 text-sm text-[#9BA3B4] sm:text-base">
             Drive two external studio monitors simultaneously with the built-in Liquid Retina screen
             open, framed by a Desk View studio camera.
           </p>
 
           <SpecGrid items={DISPLAY_METRICS} theme="dark" />
+          </div>
         </div>
       </section>
 
@@ -275,22 +289,24 @@ export function ScrollActs({ finish, onFinishPreview, onJumpToStudio }: ScrollAc
         aria-labelledby="act-connectivity-heading"
         className="pointer-events-none relative flex min-h-[135vh] items-center px-4 py-24 sm:px-8 lg:px-14"
       >
-        <div className="pointer-events-auto relative w-full max-w-lg rounded-3xl border border-[#101319]/12 bg-[#EAEFF5]/88 p-6 text-[#101319] shadow-[0_24px_64px_rgba(16,19,25,0.16)] backdrop-blur-xl sm:p-8 lg:ml-auto">
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#24537A]">
-            Connectivity &amp; Endurance
-          </p>
-          <h2
-            id="act-connectivity-heading"
-            className="mt-2 text-3xl font-semibold tracking-tight text-[#101319] sm:text-4xl"
-          >
-            Snaps in cleanly. Stays untethered.
-          </h2>
+        <div className="pointer-events-auto relative w-full max-w-lg rounded-[2rem] border border-[#101319]/10 bg-[#101319]/[0.03] p-1.5 shadow-[0_24px_64px_rgba(16,19,25,0.12)] lg:ml-auto">
+          <div className="rounded-[calc(2rem-0.375rem)] bg-[#EEF2F7]/96 p-6 text-[#101319] shadow-[inset_0_1px_1px_rgba(255,255,255,0.95)] sm:p-8">
+            <span className="inline-flex items-center rounded-full border border-[#24537A]/20 bg-[#24537A]/8 px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-[#24537A]">
+              Connectivity &amp; Endurance
+            </span>
+            <h2
+              id="act-connectivity-heading"
+              className="mt-3 text-3xl font-semibold tracking-tight text-[#101319] sm:text-4xl"
+            >
+              Snaps in cleanly. Stays untethered.
+            </h2>
           <p className="mt-3 text-sm text-[#475569] sm:text-base">
             Snap-in magnetic charging, dual high-speed ports, Spatial Audio, and all-day battery
             endurance without searching for an outlet.
           </p>
 
           <SpecGrid items={CONNECTIVITY_METRICS} theme="light" />
+          </div>
         </div>
       </section>
     </div>
